@@ -1,3 +1,5 @@
+.gitignore
+
 # Pico-W-Go
 .picowgo
 .vscode/
