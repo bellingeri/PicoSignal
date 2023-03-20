@@ -1,4 +1,4 @@
-# About
+# PicoSignal
 
 This is a simple Raspberry Pico project.
 Allows to turn on and off a led via a web interface.
