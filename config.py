@@ -1,0 +1,9 @@
+# Wi-Fi
+WIFI_SSID = ""
+WIFI_PASSWORD = ""
+WIFI_MAXWAIT = 10
+WIFI_HOSTNAME = "PicoSignal"
+
+# HTTP Server
+SERVER_PORT = 80
+SERVER_TEMPLATE_FILENAME = "template.html"
