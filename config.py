@@ -1,6 +1,6 @@
 # Wi-Fi
-WIFI_SSID = "---"
-WIFI_PASSWORD = "---"
+WIFI_SSID = ""
+WIFI_PASSWORD = ""
 WIFI_MAXWAIT = 10
 WIFI_HOSTNAME = "PicoSignal"
 

@@ -1,0 +1,6 @@
+# Pico-W-Go
+.picowgo
+.vscode/
+
+# Config file
+config.py
