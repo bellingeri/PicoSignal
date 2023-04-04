@@ -4,6 +4,9 @@ WIFI_PASSWORD = ""
 WIFI_MAXWAIT = 10
 WIFI_HOSTNAME = "PicoSignal"
 
+# LED
+LED_PIN = 15
+
 # HTTP Server
 SERVER_PORT = 80
 SERVER_TEMPLATE_FILENAME = "template.html"
