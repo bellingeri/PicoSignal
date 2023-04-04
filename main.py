@@ -10,7 +10,7 @@
 	Changelog:
 	
 	0.0.1	
-			versione iniziale
+			initial release
 """
 
 from machine import Pin
@@ -23,7 +23,9 @@ import config as cfg
 network.hostname(cfg.WIFI_HOSTNAME) # type: ignore
 wlan = network.WLAN(network.STA_IF)
 led_onboard = Pin("LED", Pin.OUT)
-led_external = Pin(15, Pin.OUT)
+led_external = Pin(cfg.LED_PIN, Pin.OUT)
+
+template = ""
 
 def connect_to_network():
 	"""
@@ -33,8 +35,8 @@ def connect_to_network():
 	wlan.config(pm = 0xa11140) # type: ignore - Disable power-save mode
 	wlan.connect(cfg.WIFI_SSID, cfg.WIFI_PASSWORD)
 
+	# Wait for connect or fail
 	n = 0
-
 	while (n < cfg.WIFI_MAXWAIT):
 		if ((wlan.status() < 0) or (wlan.status() >= 3)):
 			break
@@ -42,6 +44,7 @@ def connect_to_network():
 		print("Waiting for connection...")
 		time.sleep(1)
 	
+	# Handle connection error
 	if (wlan.status() != 3):
 		raise RuntimeError("Network connection failed")
 	else:
@@ -82,7 +85,6 @@ async def serve_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrite
 		
 		url=request.split(" ")[1]
 
-
 		if (url == "/on"):
 			print("LED on")
 			led_external.on()
@@ -100,10 +102,7 @@ async def serve_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrite
 			http_header += "Content-type: text/html\r\n"
 
 			val = bool(led_external.value())
-
-			with open(cfg.SERVER_TEMPLATE_FILENAME, "r") as file:
-				http_content += file.read().replace("{status}", led_value[val])
-
+			http_content += template.replace("{status}", led_value[val])
 
 		response = http_header + "\r\n" + http_content
 
@@ -115,8 +114,14 @@ async def serve_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrite
 
 
 async def main():
+	global template
+
 	print("Connecting to Network...")
 	connect_to_network()
+
+	print("Read template...")
+	with open(cfg.SERVER_TEMPLATE_FILENAME, "r") as file:
+		template = file.read()
 
 	print("Setting up webserver...")
 	asyncio.create_task(asyncio.start_server(serve_client, "0.0.0.0", cfg.SERVER_PORT))
